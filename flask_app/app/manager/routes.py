@@ -17,13 +17,13 @@ def get_managers():
     managers_data = [{"manager_id": manager.manager_id, "user_name": manager.user_name} for manager in managers]
     return jsonify(managers_data)
 
-@bp.route('/managers/<int:manager_id>', methods=['GET'])
+@bp.route('/<int:manager_id>', methods=['GET'])
 def get_manager(manager_id):
     manager = Manager.query.get_or_404(manager_id)
     manager_data = {"manager_id": manager.manager_id, "user_name": manager.user_name}
     return jsonify(manager_data)
 
-@bp.route('/managers/<int:manager_id>', methods=['PUT'])
+@bp.route('/<int:manager_id>', methods=['PUT'])
 def update_manager(manager_id):
     manager = Manager.query.get_or_404(manager_id)
     data = request.json
@@ -32,7 +32,7 @@ def update_manager(manager_id):
     db.session.commit()
     return jsonify({"message": "Manager updated successfully."})
 
-@bp.route('/managers/<int:manager_id>', methods=['DELETE'])
+@bp.route('/<int:manager_id>', methods=['DELETE'])
 def delete_manager(manager_id):
     manager = Manager.query.get_or_404(manager_id)
     db.session.delete(manager)
