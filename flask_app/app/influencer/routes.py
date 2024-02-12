@@ -4,6 +4,7 @@ from app.models.influencer import Influencer
 from flask import jsonify, request
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.exceptions import BadRequest
+from app import helper
 
 @bp.route('/')
 def get_influencers():
@@ -11,7 +12,8 @@ def get_influencers():
     return jsonify([{"influencer_id": influencer.influencer_id, "name": influencer.name} for influencer in influencers_list])
 
 @bp.route('/', methods=['POST'])
-def create_influencer():
+@helper.token_required
+def create_influencer(current_manager):
     data = request.get_json()
     try:
         if not data or 'name' not in data or 'url' not in data:  # Basic validation to check if name exists
@@ -29,7 +31,8 @@ def create_influencer():
         return jsonify({"error": "An unexpected error occurred."}), 500
 
 @bp.route('/<int:influencer_id>', methods=['PUT'])
-def update_influencer(influencer_id):
+@helper.token_required
+def update_influencer(current_manager, influencer_id):
     data = request.get_json()
     try:
         influencer = Influencer.query.get_or_404(influencer_id)
@@ -43,7 +46,8 @@ def update_influencer(influencer_id):
         return jsonify({"error": "An unexpected error occurred."}), 500
     
 @bp.route('/influencers/<int:influencer_id>', methods=['DELETE'])
-def delete_influencer(influencer_id):
+@helper.token_required
+def delete_influencer(current_manager, influencer_id):
         influencer = Influencer.query.get_or_404(influencer_id)
         db.session.delete(influencer)
         db.session.commit()

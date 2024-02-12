@@ -2,11 +2,13 @@ import datetime
 from functools import wraps
 
 
-from flask import request, jsonify, current_app
+from flask import request, jsonify
 from app.models.manager import Manager
 import jwt
 from werkzeug.security import check_password_hash
+from dotenv import dotenv_values
 
+config = dotenv_values(".env")
 #### Referencia:
 # https://medium.com/@hedgarbezerra35/api-rest-com-flask-autenticacao-25d99b8679b6
 # https://github.com/hedgarbezerra/Another-FlaskAPI/blob/master/app/routes/routes.py
@@ -19,10 +21,12 @@ def token_required(f):
         if not token:
             return jsonify({"message": "token is missing", "data": []}), 401
         try:
-            data = jwt.decode(token, current_app.config["SECRET_KEY"])
+            print(f"token: {token}")
+            data = jwt.decode(token, config["SECRET_KEY"],algorithms='HS256')
+            print(f"data:{data}")
             current_user = Manager.get_by_username(username=data["username"])
-        except:
-            return jsonify({"message": "token is invalid or expired", "data": []}), 401
+        except Exception as e:
+            return jsonify({"message": "token is invalid or expired", "data": [str(e)]}), 401
         return f(current_user, *args, **kwargs)
 
     return decorated
@@ -50,7 +54,8 @@ def auth():
                 "username": user.user_name,
                 "exp": datetime.datetime.now() + datetime.timedelta(hours=12),
             },
-            current_app.config["SECRET_KEY"],
+            config["SECRET_KEY"],
+            algorithm='HS256'
         )
         return jsonify(
             {
