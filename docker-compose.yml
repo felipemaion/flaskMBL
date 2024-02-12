@@ -1,0 +1,36 @@
+# docker-compose.dev.yml
+version: '3'
+
+services:
+  app:
+    container_name: mbl-linktree
+    build:
+      context: ./flask_app
+    # Set envrionment variables based on the .env file
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./flask_app:/app
+    restart: always
+    ports:
+      - 5000:5000
+  db:
+    image: postgres:16
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: linktree
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: masterkey
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        ["CMD", "pg_isready", "-U", "postgres", "-d", "${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+volumes:
+  pgdata: {}
