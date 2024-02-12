@@ -3,12 +3,14 @@ from app.extensions import db
 from flask import jsonify, request
 from app.models.link import Link
 import hashlib
+from app import helper
 
 
 ## LINKS
 # Create a new link
 @bp.route("/", methods=["POST"])
-def create_link():
+@helper.token_required
+def create_link(current_manager):
     data = request.json
     if "url_reduced" in data and data["url_reduced"]:  # If url_reduced is provided
         existing_link = Link.query.filter_by(url_reduced=data["url_reduced"]).first()
@@ -53,7 +55,8 @@ def create_link():
 
 # Retrieve all links
 @bp.route("/", methods=["GET"])
-def get_links():
+@helper.token_required
+def get_links(current_manager):
     links = Link.query.all()
     links_data = [
         {
@@ -72,7 +75,8 @@ def get_links():
 
 # Retrieve a specific link
 @bp.route("/<int:link_id>", methods=["GET"])
-def get_link(link_id):
+@helper.token_required
+def get_link(current_manager, link_id):
     link = Link.query.get_or_404(link_id)
     link_data = {
         "link_id": link.link_id,
@@ -88,7 +92,8 @@ def get_link(link_id):
 
 # Update an existing link
 @bp.route("//<int:link_id>", methods=["PUT"])
-def update_link(link_id):
+@helper.token_required
+def update_link(current_manager, link_id):
     link = Link.query.get_or_404(link_id)
     data = request.json
     link.link_name = data["link_name"]
@@ -102,7 +107,8 @@ def update_link(link_id):
 
 # Delete a link
 @bp.route("/<int:link_id>", methods=["DELETE"])
-def delete_link(link_id):
+@helper.token_required
+def delete_link(current_manager, link_id):
     link = Link.query.get_or_404(link_id)
     db.session.delete(link)
     db.session.commit()
