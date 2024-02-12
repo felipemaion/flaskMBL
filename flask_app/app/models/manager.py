@@ -9,7 +9,7 @@
 #     def __repr__(self):
 #         return f'<Manager "{self.title}">'
 
-import hashlib
+from werkzeug.security import generate_password_hash
 from app.extensions import db
 
 
@@ -29,18 +29,22 @@ class Manager(db.Model):
     @_password.setter
     def _password(self, _password):
         # Hash the password before storing it
-        self.password = hashlib.sha256(_password.encode()).hexdigest()
+        self.password = generate_password_hash(_password)
+
+    @classmethod
+    def get_by_username(cls, username):
+        return cls.query.filter_by(user_name=username).one()
 
 
 # Register event listener to hash password before insertion
 @db.event.listens_for(Manager, "before_insert")
 def hash_password_before_insert(mapper, connection, target):
     if target.password:
-        target.password = hashlib.sha256(target.password.encode()).hexdigest()
+        target.password = generate_password_hash(target.password)
 
 
 # Register event listener to hash password before update
 @db.event.listens_for(Manager, "before_update")
 def hash_password_before_update(mapper, connection, target):
     if target.password:
-        target.password = hashlib.sha256(target.password.encode()).hexdigest()
+        target.password = generate_password_hash(target.password)
