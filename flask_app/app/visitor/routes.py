@@ -2,7 +2,7 @@ from flask import request, jsonify
 from datetime import datetime
 from app.models.visitor import Visitor
 from app.extensions import db
-from app.manager import bp
+from app.visitor import bp
 
 
 # Create a new visitor
