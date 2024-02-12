@@ -22,8 +22,8 @@ class Influencer(db.Model):
     url = db.Column(db.String(255))
     created_at = db.Column(db.DateTime, default=datetime.utcnow())
 
-    # links = db.relationship('Link', backref='influencer_obj', lazy=True, cascade="all, delete-orphan") # Changed backref name
-    # visitors = db.relationship('Visitor', backref='influencer', lazy=True)
+    links = db.relationship('Link', backref='influencer_obj', lazy=True, cascade="all, delete-orphan") # Changed backref name
+    visitors = db.relationship('Visitor', backref='influencer', lazy=True)
 
     def __repr__(self):
         return f'<Influencer "{self.name}">'
