@@ -10,6 +10,7 @@ from app import helper
 # Create a new link
 @bp.route("/", methods=["POST"])
 @helper.token_required
+@helper.manager_required
 def create_link(current_manager):
     data = request.json
     if "url_reduced" in data and data["url_reduced"]:  # If url_reduced is provided
@@ -56,6 +57,7 @@ def create_link(current_manager):
 # Retrieve all links
 @bp.route("/", methods=["GET"])
 @helper.token_required
+@helper.manager_required
 def get_links(current_manager):
     links = Link.query.all()
     links_data = [
@@ -76,6 +78,7 @@ def get_links(current_manager):
 # Retrieve a specific link
 @bp.route("/<int:link_id>", methods=["GET"])
 @helper.token_required
+@helper.manager_required
 def get_link(current_manager, link_id):
     link = Link.query.get_or_404(link_id)
     link_data = {
@@ -93,6 +96,7 @@ def get_link(current_manager, link_id):
 # Update an existing link
 @bp.route("//<int:link_id>", methods=["PUT"])
 @helper.token_required
+@helper.manager_required
 def update_link(current_manager, link_id):
     link = Link.query.get_or_404(link_id)
     data = request.json
@@ -108,6 +112,7 @@ def update_link(current_manager, link_id):
 # Delete a link
 @bp.route("/<int:link_id>", methods=["DELETE"])
 @helper.token_required
+@helper.manager_required
 def delete_link(current_manager, link_id):
     link = Link.query.get_or_404(link_id)
     db.session.delete(link)

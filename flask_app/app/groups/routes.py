@@ -5,6 +5,7 @@ from app import helper
 
 @bp.route('/')
 @helper.token_required
+@helper.manager_required
 def index(current_manager):
     posts = Group.query.all()
     return posts
