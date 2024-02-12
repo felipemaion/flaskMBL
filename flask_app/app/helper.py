@@ -7,6 +7,10 @@ from app.models.manager import Manager
 import jwt
 from werkzeug.security import check_password_hash
 
+#### Referencia:
+# https://medium.com/@hedgarbezerra35/api-rest-com-flask-autenticacao-25d99b8679b6
+# https://github.com/hedgarbezerra/Another-FlaskAPI/blob/master/app/routes/routes.py
+
 
 def token_required(f):
     @wraps(f)
