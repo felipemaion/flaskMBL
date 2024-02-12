@@ -11,7 +11,7 @@ def get_influencers():
     return jsonify([{"influencer_id": influencer.influencer_id, "name": influencer.name} for influencer in influencers_list])
 
 @bp.route('/', methods=['POST'])
-def create_influencer(data):
+def create_influencer():
     data = request.get_json()
     try:
         if not data or 'name' not in data or 'url' not in data:  # Basic validation to check if name exists
