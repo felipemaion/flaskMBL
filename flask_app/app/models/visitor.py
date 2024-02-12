@@ -9,9 +9,9 @@ class Visitor(db.Model):
     referer = db.Column(db.Text)
     location = db.Column(db.String(100))
     link_id = db.Column(db.Integer, db.ForeignKey('link.link_id'), nullable=False)
-    created_at = db.Column(db.DateTime, default= datetime.now())
+    created_at = db.Column(db.DateTime, default= datetime.utcnow())
     headers = db.Column(JSONB, default={})
     
     def __repr__(self):
-        return f'<Visitor "{self.title}">'
+        return f'<Visitor "{self.visitor_id}">'
     

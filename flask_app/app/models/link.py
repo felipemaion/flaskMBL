@@ -1,5 +1,6 @@
 from app.extensions import db
 from . import visitor
+from datetime import datetime
 # class Link(db.Model):
 #     __tablename__ = 'link'
 #     link_id = db.Column(db.Integer, primary_key=True)
@@ -24,7 +25,7 @@ class Link(db.Model):
     url_reduced = db.Column(db.String(100), nullable=False)
     isvisible = db.Column(db.Boolean)
     influencer_id = db.Column(db.Integer, db.ForeignKey('influencer.influencer_id'))
-    created_at = db.Column(db.DateTime)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow())
 
     visitors = db.relationship('Visitor', backref='link', lazy=True)
     
