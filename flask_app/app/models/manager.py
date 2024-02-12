@@ -12,12 +12,19 @@
 from werkzeug.security import generate_password_hash
 from app.extensions import db
 
+import enum
+
+class Role(enum.Enum):
+    ADMIN = 1
+    MANAGER = 2
+    USER = 3
 
 class Manager(db.Model):
     __tablename__ = "manager"
-    manager_id = db.Column(db.Integer, primary_key=True)
+    manager_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_name = db.Column(db.String(100))
     password = db.Column(db.String(255))  # Storing hashed password
+    role  = db.Column(db.Enum(Role), default=Role.MANAGER)
 
     def __repr__(self):
         return f'<Manager "{self.user_name}">'

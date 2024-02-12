@@ -7,12 +7,15 @@ from werkzeug.exceptions import BadRequest
 from app import helper
 
 @bp.route('/')
+@helper.token_required
+@helper.manager_required
 def get_influencers():
     influencers_list = Influencer.query.all()
     return jsonify([{"influencer_id": influencer.influencer_id, "name": influencer.name} for influencer in influencers_list])
 
 @bp.route('/', methods=['POST'])
 @helper.token_required
+@helper.admin_required
 def create_influencer(current_manager):
     data = request.get_json()
     try:
@@ -32,6 +35,7 @@ def create_influencer(current_manager):
 
 @bp.route('/<int:influencer_id>', methods=['PUT'])
 @helper.token_required
+@helper.admin_required
 def update_influencer(current_manager, influencer_id):
     data = request.get_json()
     try:
@@ -47,6 +51,7 @@ def update_influencer(current_manager, influencer_id):
     
 @bp.route('/influencers/<int:influencer_id>', methods=['DELETE'])
 @helper.token_required
+@helper.admin_required
 def delete_influencer(current_manager, influencer_id):
         influencer = Influencer.query.get_or_404(influencer_id)
         db.session.delete(influencer)

@@ -19,7 +19,7 @@ from datetime import datetime
 
 class Link(db.Model):
     __tablename__ = "link"
-    link_id = db.Column(db.Integer, primary_key=True)
+    link_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     link_name = db.Column(db.String(255), nullable=False)
     url = db.Column(db.String(500), nullable=False)
     url_reduced = db.Column(db.String(100), nullable=False)
