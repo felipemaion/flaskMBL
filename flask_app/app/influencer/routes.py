@@ -11,7 +11,7 @@ from app import helper
 @helper.manager_required
 def get_influencers(current_manager):
     influencers_list = Influencer.query.all()
-    return jsonify([{"influencer_id": influencer.influencer_id, "name": influencer.name} for influencer in influencers_list])
+    return jsonify([{"influencer_id": influencer.influencer_id, "name": influencer.name,"url":f"mblink/{influencer.url}"} for influencer in influencers_list])
 
 @bp.route('/', methods=['POST'])
 @helper.token_required
