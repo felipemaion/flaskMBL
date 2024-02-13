@@ -19,8 +19,8 @@ COPY . /app
 RUN export SECRET_KEY=ac1a8b322f381c9fbcc99356f129d4296cc3bf400b52832d7a7af9c3268e55ae 
 RUN python3 -m pip install --upgrade pip && \
     pip install -r app/requirements.txt && \
-    pip install -U python-dotenv\
-    pip install -u Flask-Cors
+    pip install -U python-dotenv && \
+    pip install -U Flask-Cors
 
 EXPOSE 5000
 
