@@ -7,7 +7,8 @@ from app.extensions import db
 def create_app(config_class=Config):
     app = Flask(__name__)
     # cors = CORS(app, resources={r"/*": {"origins": "*"}})
-    cors = CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE"]}})
+    cors = CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "PUT", "DELETE"], "supports_credentials": True,
+    "allow_headers": ["Content-Type", "Authorization", "X-Requested-With"]}})
     app.config.from_object(config_class)
 
     # Initialize Flask extensions here
