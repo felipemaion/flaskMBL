@@ -9,7 +9,7 @@ from app import helper
 @bp.route('/')
 @helper.token_required
 @helper.manager_required
-def get_influencers():
+def get_influencers(current_manager):
     influencers_list = Influencer.query.all()
     return jsonify([{"influencer_id": influencer.influencer_id, "name": influencer.name} for influencer in influencers_list])
 
