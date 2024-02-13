@@ -3,7 +3,6 @@ from app.extensions import db
 from sqlalchemy.dialects.postgresql import JSONB
 
 class Visitor(db.Model):
-    __tablename__ = 'visitor'
     visitor_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     influencer_id = db.Column(db.Integer, db.ForeignKey('influencer.influencer_id'), nullable=False)
     referer = db.Column(db.Text)

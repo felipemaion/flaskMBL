@@ -19,14 +19,14 @@ def get_influencers(current_manager):
 def create_influencer(current_manager):
     data = request.get_json()
     try:
-        if not data or 'name' not in data or 'url' not in data:  # Basic validation to check if name exists
+        if not data or 'name' not in data or 'url' not in data:
             raise BadRequest('Missing fields in request data')
         new_influencer = Influencer(name=data['name'],url=data['url'])
         db.session.add(new_influencer)
         db.session.commit()
         return jsonify({"message": "Influencer created successfully", "influencer_id": new_influencer.influencer_id}), 201
     except SQLAlchemyError as e:
-        db.session.rollback()  # Rollback the session to a clean state
+        db.session.rollback()
         return jsonify({"DB error": str(e)}), 500
     except BadRequest as e:
         return jsonify({"error": str(e)}), 400
@@ -41,6 +41,7 @@ def update_influencer(current_manager, influencer_id):
     try:
         influencer = Influencer.query.get_or_404(influencer_id)
         influencer.name = data.get('name', influencer.name)
+        influencer.url = data.get('url', influencer.url)
         db.session.commit()
         return jsonify({"message": "Influencer updated successfully", "influencer_id": influencer.influencer_id})
     except SQLAlchemyError as e:
@@ -49,11 +50,11 @@ def update_influencer(current_manager, influencer_id):
     except Exception as e:
         return jsonify({"error": "An unexpected error occurred."}), 500
     
-@bp.route('/influencers/<int:influencer_id>', methods=['DELETE'])
+@bp.route('/<int:influencer_id>', methods=['DELETE'])
 @helper.token_required
 @helper.admin_required
 def delete_influencer(current_manager, influencer_id):
         influencer = Influencer.query.get_or_404(influencer_id)
         db.session.delete(influencer)
         db.session.commit()
-        return jsonify({"message": "Influencer deleted successfully"}), 500
+        return jsonify({"message": "Influencer deleted successfully"}), 200
