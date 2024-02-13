@@ -1,3 +1,14 @@
+# from app.extensions import db
+
+# class Manager(db.Model):
+#     __tablename__ = 'manager'
+#     manager_id = db.Column(db.Integer, primary_key=True)
+#     user_name = db.Column(db.String(100))
+#     password = db.Column(db.String(255))
+
+#     def __repr__(self):
+#         return f'<Manager "{self.title}">'
+
 from werkzeug.security import generate_password_hash
 from app.extensions import db
 
@@ -9,6 +20,7 @@ class Role(enum.Enum):
     USER = 3
 
 class Manager(db.Model):
+    __tablename__ = "manager"
     manager_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_name = db.Column(db.String(100))
     password = db.Column(db.String(255))  # Storing hashed password

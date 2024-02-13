@@ -5,6 +5,9 @@ from app.models.link import Link
 import hashlib
 from app import helper
 
+
+## LINKS
+# Create a new link
 @bp.route("/", methods=["POST"])
 @helper.token_required
 @helper.manager_required
@@ -22,12 +25,14 @@ def create_link(current_manager):
                 isvisible=data.get("isvisible", True),
                 influencer_id=data["influencer_id"],
             )
-    else:
+    else:  # If url_reduced is not provided, generate a reduced link using hash
         hash_value = hashlib.sha256(
             data["url"].encode()
             + data["link_name"].encode()
             + str(data["influencer_id"]).encode()
-        ).hexdigest()[:8]
+        ).hexdigest()[
+            :8
+        ]  # Using hash for simplicity
         new_link = Link(
             link_name=data["link_name"],
             url=data["url"],
@@ -35,13 +40,21 @@ def create_link(current_manager):
             isvisible=data.get("isvisible", True),
             influencer_id=data["influencer_id"],
         )
+
     db.session.add(new_link)
     db.session.commit()
-    return (jsonify({
+    return (
+        jsonify(
+            {
                 "message": "Link created successfully.",
                 "url_reduced": new_link.url_reduced,
-            }), 201)
+            }
+        ),
+        201,
+    )
 
+
+# Retrieve all links
 @bp.route("/", methods=["GET"])
 @helper.token_required
 @helper.manager_required
@@ -61,6 +74,8 @@ def get_links(current_manager):
     ]
     return jsonify(links_data)
 
+
+# Retrieve a specific link
 @bp.route("/<int:link_id>", methods=["GET"])
 @helper.token_required
 @helper.manager_required
@@ -77,6 +92,8 @@ def get_link(current_manager, link_id):
     }
     return jsonify(link_data)
 
+
+# Update an existing link
 @bp.route("//<int:link_id>", methods=["PUT"])
 @helper.token_required
 @helper.manager_required
@@ -91,6 +108,8 @@ def update_link(current_manager, link_id):
     db.session.commit()
     return jsonify({"message": "Link updated successfully."})
 
+
+# Delete a link
 @bp.route("/<int:link_id>", methods=["DELETE"])
 @helper.token_required
 @helper.manager_required
