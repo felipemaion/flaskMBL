@@ -37,6 +37,12 @@ def create_app(config_class=Config):
 
     app.register_blueprint(login_bp, url_prefix="/login")
 
+
+    from app.rede import bp as rede_bp
+
+    app.register_blueprint(rede_bp, url_prefix="/rede")
+
+
     @app.route("/")
     def test_page():
         return ""
