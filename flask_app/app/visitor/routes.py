@@ -5,10 +5,9 @@ from app.extensions import db
 from app.visitor import bp
 from app import helper
 
-
-# Create a new visitor
 @bp.route('/', methods=['POST'])
-# @helper.token_required
+@helper.token_required
+@helper.manager_required
 def create_visitor(current_manager):
     data = request.json
     new_visitor = Visitor(influencer_id=data['influencer_id'], referer=data.get('referer'), location=data.get('location'),
@@ -17,9 +16,9 @@ def create_visitor(current_manager):
     db.session.commit()
     return jsonify({"message": "Visitor created successfully."}), 201
 
-# Retrieve all visitors
 @bp.route('/', methods=['GET'])
-# @helper.token_required
+@helper.token_required
+@helper.manager_required
 def get_visitors(current_manager):
     visitors = Visitor.query.all()
     visitors_data = [{"visitor_id": visitor.visitor_id, "influencer_id": visitor.influencer_id,
@@ -28,9 +27,9 @@ def get_visitors(current_manager):
                       "headers": visitor.headers} for visitor in visitors]
     return jsonify(visitors_data)
 
-# Retrieve a specific visitor
 @bp.route('/<int:visitor_id>', methods=['GET'])
-# @helper.token_required
+@helper.token_required
+@helper.manager_required
 def get_visitor(current_manager, visitor_id):
     visitor = Visitor.query.get_or_404(visitor_id)
     visitor_data = {"visitor_id": visitor.visitor_id, "influencer_id": visitor.influencer_id,
@@ -39,10 +38,9 @@ def get_visitor(current_manager, visitor_id):
                     "headers": visitor.headers}
     return jsonify(visitor_data)
 
-# Update an existing visitor
 @bp.route('/<int:visitor_id>', methods=['PUT'])
-# @helper.token_required
-# @helper.manager_required
+@helper.token_required
+@helper.manager_required
 def update_visitor(current_manager, visitor_id):
     visitor = Visitor.query.get_or_404(visitor_id)
     data = request.json
@@ -52,7 +50,7 @@ def update_visitor(current_manager, visitor_id):
     db.session.commit()
     return jsonify({"message": "Visitor updated successfully."})
 
-# Delete a visitor
+
 @bp.route('/<int:visitor_id>', methods=['DELETE'])
 @helper.token_required
 @helper.manager_required

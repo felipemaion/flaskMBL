@@ -14,12 +14,10 @@ def create_manager(current_manager):
     db.session.commit()
     return jsonify({"message": "Manager created successfully."}), 201
 
-
 @bp.route("/", methods=["GET"])
 @helper.token_required
 @helper.manager_required
 def get_managers(current_manager):
-    # print(f"Payload:{current_manager}")
     managers = Manager.query.all()
     managers_data = [
         {
@@ -27,21 +25,17 @@ def get_managers(current_manager):
             "user_name": manager.user_name,
             "password": manager.password,
             "role":str(manager.role),
-        }
-        for manager in managers
+        } for manager in managers
     ]
     return jsonify(managers_data)
-
 
 @bp.route("/<int:manager_id>", methods=["GET"])
 @helper.token_required
 @helper.manager_required
 def get_manager(current_manager,manager_id):
-    # print(manager_id)
     manager = Manager.query.get_or_404(manager_id)
     manager_data = {"manager_id": manager.manager_id, "user_name": manager.user_name, "role":manager.role}
     return jsonify(manager_data)
-
 
 @bp.route("/<int:manager_id>", methods=["PUT"])
 @helper.token_required
@@ -54,7 +48,6 @@ def update_manager(current_manager, manager_id):
     manager.role = Role[data["role"]]
     db.session.commit()
     return jsonify({"message": "Manager updated successfully."})
-
 
 @bp.route("/<int:manager_id>", methods=["DELETE"])
 @helper.token_required

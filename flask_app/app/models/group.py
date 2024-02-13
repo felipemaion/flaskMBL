@@ -8,4 +8,4 @@ class Group(db.Model):
 
 
     def __repr__(self):
-        return f'<Groups "{self.group_id}">'
+        return f'<Group "{self.group_id}">'
