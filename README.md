@@ -24,24 +24,39 @@ cd MBLinktree
    python -m venv venv
    ```
 2. **Ativar o ambiente virtual (venv):**
-   Windows:
 
-```shell
-  ./venv/Scripts/activate
-```
+   2.1. Windows:
 
-Linux/Mac:
+   ```shell
+     ./venv/Scripts/activate
+   ```
 
-```shell
-./venv/bin/activate
-```
+   2.2. Linux/Mac:
+
+   ```shell
+   ./venv/bin/activate
+   ```
 
 3. **Atualizar os pacotes utilizados na aplicação através do arquivo requirements.txt:**
+
    ```shell
    pip install -r requirements.txt
    ```
+
    > OBS: Caso precise de um novo pacote, adicionar o pacote no arquivo requirements.txt. Ao executar o comando acima, irá atualizar e instalar tudo que o ambiente necessita.\
-4. **Executar o comando para iniciar a aplicação**
+
+4. **Crie o arquivo .env:**
+   Crie o arquivo .env no mesmo nível do arquivo config.py contendo as chaves:
+
+```
+FLASK_APP=app
+FLASK_ENV=development
+LOCAL_DATABASE_URI=postgresql://postgres:password@localhost:5432/postgres
+SECRET_KEY=XXXX
+DATABASE_URI=postgresql://postgres:password@localhost:5432/postgres
+```
+
+5. **Executar o comando para iniciar a aplicação**
 
 ```shell
  flask run --debug
